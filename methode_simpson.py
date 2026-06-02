@@ -16,12 +16,8 @@ def simpson_basique(a, b, n=10):
 
 def simpson_numpy(a,b, n=10):
     valeurs=np.linspace(a,b,n+1)
-    f_valeurs=polynome(valeurs)
-    aire=sum(f_valeurs)
+    u=valeurs[:-1] #la valeur a ne peut jamais être égale à la borne finale (b)
+    v=valeurs[1:] #la valeur b ne peut jamais être égale à la borne initiale (a)
+    f_valeurs=(polynome(u)+polynome(v)+4*polynome((u+v)/2))*(v-u)/6
+    aire=np.sum(f_valeurs)
     return aire
-
-def erreur_simpson_basique(a,b, n=10):
-    return abs(simpson_basique(a,b,n)-compute_solution_analytique(a,b))
-
-def erreur_simpson_numpy(a,b, n=10):
-    return abs(simpson_numpy(a,b,n)-compute_solution_analytique(a,b))
