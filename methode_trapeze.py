@@ -25,5 +25,3 @@ def trap_numpy(a,b,n):
     h=(b-a)/n
     integrale=h*(np.sum(y)-0.5*(y[0]+y[-1]))
     return integrale
-
-
