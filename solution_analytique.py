@@ -12,3 +12,5 @@ def compute_solution_analytique(a,b):
     F_a = p1 * a + (p2 / 2) * (a ** 2) + (p3 / 3) * (a ** 3) + (p4 / 4) * (a ** 4)
     F_b = p1 * b + (p2 / 2) * (b ** 2) + (p3 / 3) * (b ** 3) + (p4 / 4) * (b ** 4)
     return F_b - F_a
+
+print(compute_solution_analytique(3,4))

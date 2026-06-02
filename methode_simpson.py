@@ -1,7 +1,7 @@
 #Module de la méthode simpson
 
-from solution_analytique import polynome
-
+from solution_analytique import polynome, compute_solution_analytique
+import numpy as np
 def simpson_basique(a, b, n=10):
     pas=(b-a)/n
     u=a #correspond au "a" de la formule dans l'énoncé du devoir
@@ -12,4 +12,10 @@ def simpson_basique(a, b, n=10):
         #On avance d'un pas
         u=v
         v+=pas
+    return aire
+
+def simpson_numpy(a,b, n=10):
+    valeurs=np.linspace(a,b,n+1)
+    f_valeurs=polynome(valeurs)
+    aire=sum(f_valeurs)
     return aire
