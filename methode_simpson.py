@@ -19,3 +19,9 @@ def simpson_numpy(a,b, n=10):
     f_valeurs=polynome(valeurs)
     aire=sum(f_valeurs)
     return aire
+
+def erreur_simpson_basique(a,b, n=10):
+    return abs(simpson_basique(a,b,n)-compute_solution_analytique(a,b))
+
+def erreur_simpson_numpy(a,b, n=10):
+    return abs(simpson_numpy(a,b,n)-compute_solution_analytique(a,b))
