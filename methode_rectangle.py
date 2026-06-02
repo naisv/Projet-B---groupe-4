@@ -41,10 +41,3 @@ def integration_rectangle_numpy(a, b, n):
     somme_aires = np.sum(f_x) * h
 
     return somme_aires
-
-
-def compute_erreur_rectangle_base(a, b, n):
-    return compute_solution_analytique(a, b) - integration_rectangle_base(a, b, n)
-
-def compute_erreur_rectangle_numpy(a, b, n):
-    return compute_solution_analytique(a, b) - integration_rectangle_numpy(a, b, n)
