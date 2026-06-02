@@ -23,8 +23,7 @@ def integration_rectangle_base(a, b, n):
 
 def integration_rectangle_numpy(a, b, n):
     """
-    Calcule l'intégrale numérique avec la méthode des rectangles
-    en utilisant NumPy (Vectorisé)
+    Calcule l'intégrale numérique avec la méthode des rectangles en utilisant Numpy (Vectorisé)
     """
 
     # Calcul du pas
