@@ -1,0 +1,1 @@
+#Module de la méthode des trapèzes
