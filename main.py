@@ -11,7 +11,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from solution_analytique import compute_solution_analytique
-from performance import compute_erreur, temps_exec
+from performance import compute_erreur, temps_exec, convergence
 from methode_rectangle import integration_rectangle_base, integration_rectangle_numpy
 from methode_trapeze import trap_python, trap_numpy
 from methode_simpson import simpson_basique, simpson_numpy
@@ -125,7 +125,7 @@ nombre_segments, cv_simpson_numpy=convergence(simpson_numpy,a,b)
 plt.figure(figsize=(12, 7))  # Taille de la fenêtre du graphique
 
 #Tracé des courbes: trait plein pour Python, pointillé pour Numpy
-plt.axhline(y=valeur_exacte, color='black', linestyle=':', label="Valeur exacte théorique")
+plt.axhline(y=solution_exacte, color='black', linestyle=':', label="Valeur exacte théorique")
 
 plt.plot(nombre_segments, cv_rectangle_python, label="Rectangle (Python)", color="blue", linestyle="-")
 plt.plot(nombre_segments, cv_rectangle_numpy,  label="Rectangle (NumPy)",  color="cyan", linestyle="--")
