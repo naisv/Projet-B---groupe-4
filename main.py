@@ -12,7 +12,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from solution_analytique import compute_solution_analytique
-from performance import compute_erreur, temps_exec
+from performance import compute_erreur, temps_exec, convergence
 from methode_rectangle import integration_rectangle_base, integration_rectangle_numpy
 from methode_trapeze import trap_python, trap_numpy
 from methode_simpson import simpson_basique, simpson_numpy
@@ -154,3 +154,49 @@ if __name__ == "__main__":
 
     # Affichage final
     plt.show()
+
+#Graphique de convergence des méthodes ----------------------------------------------------------------------------
+
+#Définition des coefficients polynomiaux de la fonction
+p1=1
+p2=1
+p3=1
+p4=1
+
+#Définition de l'intervalle [a,b]
+a=0
+b=100
+
+#Calculs des solutions pour n_max=1000 et pas=20
+solution_exacte=compute_solution_analytique(a,b)
+nombre_segments, cv_rectangle_python=convergence(integration_rectangle_base,a,b)
+nombre_segments, cv_rectangle_numpy=convergence(integration_rectangle_numpy,a,b)
+nombre_segments, cv_trapeze_python=convergence(trap_python,a,b)
+nombre_segments, cv_trapeze_numpy=convergence(trap_numpy,a,b)
+nombre_segments, cv_simpson_python=convergence(simpson_basique,a,b)
+nombre_segments, cv_simpson_numpy=convergence(simpson_numpy,a,b)
+
+#Affichage graphique des solutions en fonction du nombre de segments
+plt.figure(figsize=(12, 7))  # Taille de la fenêtre du graphique
+
+#Tracé des courbes: trait plein pour Python, pointillé pour Numpy
+plt.axhline(y=solution_exacte, color='black', linestyle=':', label="Valeur exacte théorique")
+
+plt.plot(nombre_segments, cv_rectangle_python, label="Rectangle (Python)", color="blue", linestyle="-")
+plt.plot(nombre_segments, cv_rectangle_numpy,  label="Rectangle (NumPy)",  color="cyan", linestyle="--")
+
+plt.plot(nombre_segments, cv_trapeze_python,   label="Trapèze (Python)",   color="green", linestyle="-")
+plt.plot(nombre_segments, cv_trapeze_numpy,    label="Trapèze (NumPy)",    color="lime", linestyle="--")
+
+plt.plot(nombre_segments, cv_simpson_python,   label="Simpson (Python)",   color="red", linestyle="-")
+plt.plot(nombre_segments, cv_simpson_numpy,    label="Simpson (NumPy)",    color="orange", linestyle="--")
+
+#Mise en page
+plt.xlabel("Nombre de segments ($n$)", fontsize=11)
+plt.ylabel("Valeur de l'intégrale calculée", fontsize=11)
+plt.title(f"Comparaison de la convergence des méthodes\nFonction étudiée : f(x) = {p1} + {p2}x + {p3}x² + {p4}x³",
+          fontsize=13, fontweight='bold', pad=15)
+plt.grid(True, which='both', linestyle=':', alpha=0.7)
+plt.legend(loc="best", fontsize=10)
+plt.show()
+
