@@ -9,6 +9,7 @@ p4=1
 
 from time import perf_counter
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from solution_analytique import compute_solution_analytique
 from performance import compute_erreur, temps_exec
@@ -99,74 +100,57 @@ if __name__ == "__main__":
     print(
         f"\n========================================================================================================================")
 
+    """
+    =======================================================================================================================
+                                        Graphique des temps de calcul en fonction de la méthode et du nombre de segment
+    =======================================================================================================================
+    """
 
-"""
-=======================================================================================================================
-                                    Graphique des temps de calcul en fonction de la méthode et du nombre de segment
-=======================================================================================================================
-"""
+    # 1. Paramètres de base
+    segments = np.arange(100, 10100, 100)
+    a = 1  # Borne inférieure
+    b = 10  # Borne supérieure
 
-# 1. Paramètres de base
-segments = [10, 50, 100, 500, 1000, 5000, 10000]
-a = 1  # Borne inférieure
-b = 10  # Borne supérieure
+    # 2. Noms des fonctions
+    fonctions = [integration_rectangle_base, integration_rectangle_numpy, trap_python, trap_numpy, simpson_basique,
+                 simpson_numpy]
 
-# 2. Noms des fonctions
-fonctions = [integration_rectangle_base, integration_rectangle_numpy, trap_python, trap_numpy, simpson_basique, simpson_numpy]
+    # 3. Dictionnaire pour ranger les résultats :
+    temps_calculs = {}
 
-# 3. Dictionnaire pour ranger les résultats :
-temps_calculs = {}
+    # 4. La double boucle pour avoir pour chaque fonction le temps en fonction du nombre de segments
+    for fonction in fonctions:
+        temps = []  # Liste temporaire pour la fonction en cours
 
-# 4. La double boucle pour avoir pour chaque fonction le temps en fonction du nombre de segments
-for fonction in fonctions:
-    temps= []  # Liste temporaire pour la fonction en cours
+        for n in segments:
+            tic = perf_counter()
+            fonction(a, b, n)
+            toc = perf_counter()
+            temps.append(toc - tic)
 
-    for n in segments:
-        tic = perf_counter()
-        fonction(a, b, n)
-        toc = perf_counter()
-        temps.append(toc - tic)
+        # On sauvegarde la liste des temps dans le dictionnaire
+        # fonction.__name__ récupère automatiquement le nom de la fonction sous forme de texte
+        temps_calculs[fonction.__name__] = temps
 
-    # On sauvegarde la liste des temps dans le dictionnaire
-    # fonction.__name__ récupère automatiquement le nom de la fonction sous forme de texte
-    temps_calculs[fonction.__name__] = temps
+    # 5. Création des graphiques
+    # Figure le graphique
+    fig, ax = plt.subplots(figsize=(8, 6))
 
-# 5. Création des graphiques
-# Figure contenant 2 sous-graphiques (1 ligne, 2 colonnes)
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
-marqueurs = ['o', 's', '^', 'v', 'D', 'x']
+    # La boucle qui trace les 6 courbes automatiquement
+    for nom in temps_calculs:
+        # On récupère les temps correspondants à la fonction 'nom'
+        temps = temps_calculs[nom]
 
-# La boucle qui trace les 6 courbes automatiquement
-for i, nom in enumerate(temps_calculs):
-    # On récupère les temps correspondants à la fonction 'nom'
-    temps = temps_calculs[nom]
+        # On trace la courbe
+        ax.plot(segments, temps, label=nom)
 
-    # On trace la courbe avec son label et un marqueur unique sur le graphique 1 (Linéaire)
-    ax1.plot(segments, temps, label=nom, marker=marqueurs[i])
+    # 6. Mise en forme du graphique et affichage
 
-    # On trace la courbe avec son label et un marqueur unique sur le graphique 2 (Logarithmique)
-    ax2.plot(segments, temps, label=nom, marker=marqueurs[i])
+    #     Graphique 1
+    ax.set_title("Temps de calcul des méthodes d'intégration")
+    ax.set_xlabel("Nombre de segments (N)")
+    ax.set_ylabel("Temps de calcul (secondes)")
+    ax.legend(loc='best')
 
-# 6. Mise en forme des graphiques et affichage
-
-   #     Graphique 1 : Échelle normale (Linéaire)
-ax1.set_title("Temps de calcul des méthodes d'intégration (Linéaire)")
-ax1.set_xlabel("Nombre de segments (N)")
-ax1.set_ylabel("Temps de calcul (secondes)")
-ax1.legend(loc='best')
-
-   #      Graphique 2 : Échelle Logarithmique
-ax2.set_title("Temps de calcul des méthodes d'intégration (Logarithmique)")
-ax2.set_xlabel("Nombre de segments (N)")
-ax2.set_ylabel("Temps de calcul (secondes)")
-
-# Application de l'échelle logarithmique aux deux axes
-ax2.set_xscale('log')
-ax2.set_yscale('log')
-ax2.legend(loc='best')
-
-# Ajustement automatique pour éviter que les graphiques ne se chevauchent
-plt.tight_layout()
-
-# Affichage final
-plt.show()
+    # Affichage final
+    plt.show()
