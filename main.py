@@ -112,7 +112,7 @@ a = 1  # Borne inférieure
 b = 10  # Borne supérieure
 
 # 2. Noms des fonctions
-fonctions = [integration_rectangle_base, integration_rectangle_numpy, trap_python, trap_numpy, simpson_base, simpson_numpy]
+fonctions = [integration_rectangle_base, integration_rectangle_numpy, trap_python, trap_numpy, simpson_basique, simpson_numpy]
 
 # 3. Dictionnaire pour ranger les résultats :
 temps_calculs = {}
@@ -137,7 +137,7 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
 marqueurs = ['o', 's', '^', 'v', 'D', 'x']
 
 # La boucle qui trace les 6 courbes automatiquement
-for i, nom in enumerate(noms_fonctions):
+for i, nom in enumerate(temps_calculs):
     # On récupère les temps correspondants à la fonction 'nom'
     temps = temps_calculs[nom]
 
