@@ -7,9 +7,10 @@ p2=1
 p3=1
 p4=1
 
+from time import perf_counter
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
-
 from solution_analytique import compute_solution_analytique
 from performance import compute_erreur, temps_exec, convergence
 from methode_rectangle import integration_rectangle_base, integration_rectangle_numpy
@@ -99,6 +100,60 @@ if __name__ == "__main__":
     print(
         f"\n========================================================================================================================")
 
+    """
+    =======================================================================================================================
+                                        Graphique des temps de calcul en fonction de la méthode et du nombre de segment
+    =======================================================================================================================
+    """
+
+    # 1. Paramètres de base
+    segments = np.arange(100, 10100, 100)
+    a = 1  # Borne inférieure
+    b = 10  # Borne supérieure
+
+    # 2. Noms des fonctions
+    fonctions = [integration_rectangle_base, integration_rectangle_numpy, trap_python, trap_numpy, simpson_basique,
+                 simpson_numpy]
+
+    # 3. Dictionnaire pour ranger les résultats :
+    temps_calculs = {}
+
+    # 4. La double boucle pour avoir pour chaque fonction le temps en fonction du nombre de segments
+    for fonction in fonctions:
+        temps = []  # Liste temporaire pour la fonction en cours
+
+        for n in segments:
+            tic = perf_counter()
+            fonction(a, b, n)
+            toc = perf_counter()
+            temps.append(toc - tic)
+
+        # On sauvegarde la liste des temps dans le dictionnaire
+        # fonction.__name__ récupère automatiquement le nom de la fonction sous forme de texte
+        temps_calculs[fonction.__name__] = temps
+
+    # 5. Création des graphiques
+    # Figure le graphique
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    # La boucle qui trace les 6 courbes automatiquement
+    for nom in temps_calculs:
+        # On récupère les temps correspondants à la fonction 'nom'
+        temps = temps_calculs[nom]
+
+        # On trace la courbe
+        ax.plot(segments, temps, label=nom)
+
+    # 6. Mise en forme du graphique et affichage
+
+    #     Graphique 1
+    ax.set_title("Temps de calcul des méthodes d'intégration")
+    ax.set_xlabel("Nombre de segments (N)")
+    ax.set_ylabel("Temps de calcul (secondes)")
+    ax.legend(loc='best')
+
+    # Affichage final
+    plt.show()
 
 #Graphique de convergence des méthodes ----------------------------------------------------------------------------
 
