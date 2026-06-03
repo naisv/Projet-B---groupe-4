@@ -109,7 +109,7 @@ if __name__ == "__main__":
     # 1. Paramètres de base
     segments = np.arange(100, 10100, 100)
     a = 1  # Borne inférieure
-    b = 10  # Borne supérieure
+    b = 100  # Borne supérieure
 
     # 2. Noms des fonctions
     fonctions = [integration_rectangle_base, integration_rectangle_numpy, trap_python, trap_numpy, simpson_basique,
@@ -147,7 +147,7 @@ if __name__ == "__main__":
     # 6. Mise en forme du graphique et affichage
 
     #     Graphique 1
-    ax.set_title("Temps de calcul des méthodes d'intégration")
+    ax.set_title(f"Temps de calcul des méthodes d'intégration\nFonction étudiée : f(x) = {p1} + {p2}x + {p3}x² + {p4}x³")
     ax.set_xlabel("Nombre de segments (N)")
     ax.set_ylabel("Temps de calcul (secondes)")
     ax.legend(loc='best')
@@ -157,46 +157,37 @@ if __name__ == "__main__":
 
 #Graphique de convergence des méthodes ----------------------------------------------------------------------------
 
-#Définition des coefficients polynomiaux de la fonction
-p1=1
-p2=1
-p3=1
-p4=1
-
-#Définition de l'intervalle [a,b]
-a=0
-b=100
 
 #Calculs des solutions pour n_max=1000 et pas=20
-solution_exacte=compute_solution_analytique(a,b)
-nombre_segments, cv_rectangle_python=convergence(integration_rectangle_base,a,b)
-nombre_segments, cv_rectangle_numpy=convergence(integration_rectangle_numpy,a,b)
-nombre_segments, cv_trapeze_python=convergence(trap_python,a,b)
-nombre_segments, cv_trapeze_numpy=convergence(trap_numpy,a,b)
-nombre_segments, cv_simpson_python=convergence(simpson_basique,a,b)
-nombre_segments, cv_simpson_numpy=convergence(simpson_numpy,a,b)
+    solution_exacte=compute_solution_analytique(a,b)
+    nombre_segments, cv_rectangle_python=convergence(integration_rectangle_base,a,b)
+    nombre_segments, cv_rectangle_numpy=convergence(integration_rectangle_numpy,a,b)
+    nombre_segments, cv_trapeze_python=convergence(trap_python,a,b)
+    nombre_segments, cv_trapeze_numpy=convergence(trap_numpy,a,b)
+    nombre_segments, cv_simpson_python=convergence(simpson_basique,a,b)
+    nombre_segments, cv_simpson_numpy=convergence(simpson_numpy,a,b)
 
 #Affichage graphique des solutions en fonction du nombre de segments
-plt.figure(figsize=(12, 7))  # Taille de la fenêtre du graphique
+    plt.figure(figsize=(12, 7))  # Taille de la fenêtre du graphique
 
 #Tracé des courbes: trait plein pour Python, pointillé pour Numpy
-plt.axhline(y=solution_exacte, color='black', linestyle=':', label="Valeur exacte théorique")
+    plt.axhline(y=solution_exacte, color='black', linestyle=':', label="Valeur exacte théorique")
 
-plt.plot(nombre_segments, cv_rectangle_python, label="Rectangle (Python)", color="blue", linestyle="-")
-plt.plot(nombre_segments, cv_rectangle_numpy,  label="Rectangle (NumPy)",  color="cyan", linestyle="--")
+    plt.plot(nombre_segments, cv_rectangle_python, label="Rectangle (Python)", color="blue", linestyle="-")
+    plt.plot(nombre_segments, cv_rectangle_numpy,  label="Rectangle (NumPy)",  color="cyan", linestyle="--")
 
-plt.plot(nombre_segments, cv_trapeze_python,   label="Trapèze (Python)",   color="green", linestyle="-")
-plt.plot(nombre_segments, cv_trapeze_numpy,    label="Trapèze (NumPy)",    color="lime", linestyle="--")
+    plt.plot(nombre_segments, cv_trapeze_python,   label="Trapèze (Python)",   color="green", linestyle="-")
+    plt.plot(nombre_segments, cv_trapeze_numpy,    label="Trapèze (NumPy)",    color="lime", linestyle="--")
 
-plt.plot(nombre_segments, cv_simpson_python,   label="Simpson (Python)",   color="red", linestyle="-")
-plt.plot(nombre_segments, cv_simpson_numpy,    label="Simpson (NumPy)",    color="orange", linestyle="--")
+    plt.plot(nombre_segments, cv_simpson_python,   label="Simpson (Python)",   color="red", linestyle="-")
+    plt.plot(nombre_segments, cv_simpson_numpy,    label="Simpson (NumPy)",    color="orange", linestyle="--")
 
 #Mise en page
-plt.xlabel("Nombre de segments ($n$)", fontsize=11)
-plt.ylabel("Valeur de l'intégrale calculée", fontsize=11)
-plt.title(f"Comparaison de la convergence des méthodes\nFonction étudiée : f(x) = {p1} + {p2}x + {p3}x² + {p4}x³",
-          fontsize=13, fontweight='bold', pad=15)
-plt.grid(True, which='both', linestyle=':', alpha=0.7)
-plt.legend(loc="best", fontsize=10)
-plt.show()
+    plt.xlabel("Nombre de segments ($n$)", fontsize=11)
+    plt.ylabel("Valeur de l'intégrale calculée", fontsize=11)
+    plt.title(f"Comparaison de la convergence des méthodes\nFonction étudiée : f(x) = {p1} + {p2}x + {p3}x² + {p4}x³",
+           fontsize=13, fontweight='bold', pad=15)
+    plt.grid(True, which='both', linestyle=':', alpha=0.7)
+    plt.legend(loc="best", fontsize=10)
+    plt.show()
 
