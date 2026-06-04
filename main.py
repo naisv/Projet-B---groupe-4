@@ -7,7 +7,9 @@ p2 = 1
 p3 = 1
 p4 = 1
 
+from time import perf_counter
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.integrate as integrate
