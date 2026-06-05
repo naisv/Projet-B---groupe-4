@@ -5,7 +5,7 @@
 p1 = 1
 p2 = 1
 p3 = 1
-p4 = 1
+p4 = 0
 
 from time import perf_counter
 import pandas as pd
@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.integrate as integrate
 
-from solution_analytique import compute_solution_analytique
+from solution_analytique import compute_solution_analytique, polynome
 from performance import compute_erreur, temps_exec, convergence
 from methode_rectangle import integration_rectangle_base, integration_rectangle_numpy
 from methode_trapeze import trap_python, trap_numpy
@@ -119,7 +119,7 @@ if __name__ == "__main__":
 
     plt.xlabel("Nombre de segments ($n$)", fontsize=11)
     plt.ylabel("Valeur de l'intégrale calculée", fontsize=11)
-    plt.title(f"Comparaison de la convergence des méthodes\nFonction étudiée : f(x) = {p1} + {p2}x + {p3}x² + {p4}x³",
+    plt.title(f"Comparaison de la convergence des méthodes\nFonction étudiée : f(x) = {p1} + {p2}x + {p3}x² + {p4}x³ Intervalle [{a}, {b}]",
               fontsize=13, fontweight='bold', pad=15)
     plt.grid(True, which='both', linestyle=':', alpha=0.7)
     plt.legend(loc="best", fontsize=10)
@@ -142,7 +142,7 @@ if __name__ == "__main__":
 
     plt.xlabel("Nombre de segments ($n$)", fontsize=11)
     plt.ylabel("Valeur de l'intégrale calculée", fontsize=11)
-    plt.title(f"Section 2.4 : Validation des courbes avec les méthodes pré-programmées (SciPy)\nIntervalle [{a}, {b}]",
+    plt.title(f"Vérification de la convergence des méthodes pré-programmées (SciPy)\nFonction étudiée : f(x) = {p1} + {p2}x + {p3}x² + {p4}x³ Intervalle [{a}, {b}]",
               fontsize=13, fontweight='bold', pad=15)
     plt.grid(True, which='both', linestyle=':', alpha=0.7)
     plt.legend(loc="best", fontsize=10)
@@ -188,7 +188,51 @@ if __name__ == "__main__":
     ax2.legend(loc="best", fontsize=10)
 
     plt.suptitle(
-        "Analyse Comparative des Performances Temporelles (Échelle Logarithmique)\nPython de base vs NumPy vs SciPy",
+        f"Analyse Comparative des Performances Temporelles (Échelle Logarithmique)\nPython de base vs NumPy vs SciPy \n Fonction étudiée : f(x) = {p1} + {p2}x + {p3}x² + {p4}x³ Intervalle [{a}, {b}]",
         fontsize=14, fontweight='bold', y=0.98)
+    plt.tight_layout()
+    plt.show()
+
+    # GRAPHIQUE 4 : Comparaison des erreurs pour les 3 méthodes (rectangle, trapèzes, simpson)
+    # Listes pour stocker les erreurs d'une seule implémentation (NumPy) par méthode
+    err_rect = []
+    err_trap = []
+    err_simp = []
+
+    # --- Calcul des erreurs ---
+    for n in nombre_segments:
+        # 1. Calcul des erreurs (en s'assurant d'avoir la valeur absolue)
+        e_rect = abs(compute_erreur(a, b, n, integration_rectangle_numpy))
+        e_trap = abs(compute_erreur(a, b, n, trap_numpy))
+        e_simp = abs(compute_erreur(a, b, n, simpson_numpy))
+
+        # 2. Protection contre le zéro absolu pour l'échelle log-log
+        # Si la méthode (comme Simpson) trouve l'aire exacte, l'erreur est 0.0
+        err_rect.append(e_rect if e_rect > 0 else 1e-16)
+        err_trap.append(e_trap if e_trap > 0 else 1e-16)
+        err_simp.append(e_simp if e_simp > 0 else 1e-16)
+
+    # --- Création de la figure (Un seul grand graphique) ---
+    fig, ax = plt.subplots(figsize=(12, 8))
+
+    # Tracé des 3 méthodes mathématiques
+    ax.plot(nombre_segments, err_rect, label="Rectangles", color="deepskyblue", linestyle="-", marker="s",
+            linewidth=2)
+    ax.plot(nombre_segments, err_trap, label="Trapèzes", color="lime", linestyle="-", marker="^", linewidth=2)
+    ax.plot(nombre_segments, err_simp, label="Simpson", color="magenta", linestyle="-", marker="o", linewidth=2)
+
+    # Paramétrage des axes en Log-Log
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+
+    # Habillage du graphique
+    ax.set_xlabel("Nombre de segments ($n$)", fontsize=12)
+    ax.set_ylabel("Erreur absolue", fontsize=12)
+    ax.set_title(f"Comparaison de l'erreur absolue des méthodes d'intégration numérique (Numpy)\nFonction étudiée : f(x) = {p1} + {p2}x + {p3}x² + {p4}x³ Intervalle [{a}, {b}]", fontsize=14, fontweight='bold')
+    ax.grid(True, which='both', linestyle=':', alpha=0.7)
+
+    # Ajout d'une légende claire
+    ax.legend(loc="upper right", fontsize=11, title="Méthodes (Implémentation NumPy)", title_fontsize=12)
+
     plt.tight_layout()
     plt.show()
