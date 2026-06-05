@@ -5,12 +5,8 @@ from solution_analytique import polynome, compute_solution_analytique
 
 
 def integration_rectangle_base(a, b, n):
-    """
-    Calcule l'intégrale numérique par la méthode des rectangles.
-    """
-
-    #Calcul du pas
-    h = (b - a) / n
+    #Fonction calculant l'intégrale numérique par la méthode des rectangles codée en Python de base
+    h = (b - a) / n #Calcul du pas
     somme_aires = 0.0
 
     for i in range(n):
@@ -21,13 +17,11 @@ def integration_rectangle_base(a, b, n):
 
     return somme_aires
 
-def integration_rectangle_numpy(a, b, n):
-    """
-    Calcule l'intégrale numérique avec la méthode des rectangles en utilisant Numpy (Vectorisé)
-    """
 
-    # Calcul du pas
-    h = (b - a) / n
+def integration_rectangle_numpy(a, b, n):
+    #Fonction calculant l'intégrale numérique par la méthode des rectangles codée en Numpy (vectorisé)
+    h = (b - a) / n #Calcul du pas
+    somme_aires = 0.0
 
     # Création d'un tableau contenant tous les points x_i (de 0 à n-1)
     # np.arange(n) génère [0, 1, 2, ..., n-1]

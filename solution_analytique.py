@@ -1,7 +1,5 @@
 #Module de calcul de la solution analytique
 
-
-
 #Fonction qui retourne la valeur de la fonction polynomiale pour un x donné en entrée
 def polynome(x):
     # Importation des variables globales des coefficients de la fonction polynomiale
